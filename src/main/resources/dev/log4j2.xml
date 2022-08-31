@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="info">
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>%style{%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}}{cyan} %highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=green, DEBUG=green bold, TRACE=blue} %style{${sys:PID}}{magenta} %highlight{[%15.15t]} [%X{traceId}] %style{%-40.40C{1.}}{cyan} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}</pattern>
+            </PatternLayout>
+        </Console>
+
+        <RollingFile name="debug" fileName="logs/debug.log" filePattern="logs/debug.log.%d{yyyy-MM-dd}.%i.log">
+            <PatternLayout>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %X{logger_id} %5p %t [%X{traceId}] %c{1}:%L - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="600MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20">
+                <Delete basePath="logs" maxDepth="2">
+                    <IfFileName glob="*.log" />
+                    <IfLastModified age="7D" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+        <RollingFile name="info" fileName="logs/info.log" filePattern="logs/info.log.%d{yyyy-MM-dd}.%i.log">
+            <PatternLayout>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %X{logger_id} %5p %t [%X{traceId}] %c{1}:%L - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="600MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20">
+                <Delete basePath="logs" maxDepth="2">
+                    <IfFileName glob="*.log" />
+                    <IfLastModified age="7D" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+        
+        <RollingFile name="error" fileName="logs/error.log" filePattern="logs/error.log.%d{yyyy-MM-dd}.log">
+            <PatternLayout>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %X{logger_id} %5p %t [%X{traceId}] %c{1}:%L - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+            </Policies>
+        </RollingFile>
+        
+        <RollingFile name="warn" fileName="logs/warn.log" filePattern="logs/warn.log.%d{yyyy-MM-dd}.log">
+            <PatternLayout>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %X{logger_id} %5p %t [%X{traceId}] %c{1}:%L - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"
+                    modulate="true" />
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="threadPoolMonitorLog" fileName="logs/threadPoolMonitorLog.log" filePattern="logs/threadPoolMonitorLog.log.%d{yyyy-MM-dd}.%i.log">
+            <PatternLayout>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %X{logger_id} %5p %t [%X{traceId}] %c{1}:%L - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="600MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20">
+                <Delete basePath="logs" maxDepth="2">
+                    <IfFileName glob="*.log" />
+                    <IfLastModified age="7D" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+    </Appenders>
+    <Loggers>
+        <logger name="org.springframework" level="info" />
+        <logger name="org.apache.kafka" level="info" />
+        <logger name="com.kuaike.kafka.consumer" level="info" />
+        <logger name="io.lettuce" level="info" />
+        <logger name="org.apache.http" level="info" />
+        <logger name="org.apache.zookeeper" level="info" />
+        <logger name="com.alibaba.dubbo" level="warn"/>
+        <logger name="springfox.documentation" level="info" />
+        <logger name="org.hibernate.validator" level="info" />
+
+
+        <Logger name="threadPoolMonitorLog" additivity="false" level="ALL">
+            <AppenderRef ref="threadPoolMonitorLog" level="info" />
+        </Logger>
+
+        <root level="debug" additivity="false" includeLocation="true">
+            <AppenderRef ref="console" level="info" />
+            <AppenderRef ref="error" level="error" />
+            <AppenderRef ref="warn" level="warn" />
+            <AppenderRef ref="info" level="info" />
+            <AppenderRef ref="debug" level="debug" />
+        </root>
+    </Loggers>
+</configuration>
